@@ -1,40 +1,44 @@
-# 管家 · 家庭账本（双通道版：Koofr + 坚果云）
+# 管家koofr PWA 版（v1.0.0.2）
 
-## 目录结构
+## 一句话说明
+把原 HTML 单文件应用封装成 **PWA（渐进式 Web 应用）**：可「添加到主屏幕 / 安装」，
+离线可用，图标采用你提供的星云地球图标。**功能与界面零改动**，仅新增 PWA 相关文件。
+
+## 文件结构
 ```
-/
-├─ index.html                  # 主程序（PWA 入口，已注入双通道下拉）
-├─ manifest.webmanifest        # PWA 清单
-├─ sw.js                       # 离线缓存（v2）
-├─ offline.html                # 离线提示页
-├─ icons/                      # 多尺寸图标
-└─ functions/
-   ├─ dav/[[path]].js          # Koofr 代理
-   └─ nut/[[path]].js          # 坚果云代理
+管家koofr_PWA/
+├── index.html              ← 原程序（未改功能/界面），仅注入 PWA 元数据
+├── manifest.webmanifest    ← 应用名称、图标、standalone 显示、快捷方式
+├── sw.js                   ← Service Worker，离线缓存
+├── offline.html            ← 离线时的友好提示页
+├── icons/
+│   ├── icon-72/96/128/144/152/192/384/512.png
+│   ├── apple-touch-icon.png
+│   └── splash-bg.png
+└── README.md
 ```
 
-## 部署（3 步）
-1. 解压本 zip，**全部文件**上传/推送到 GitHub 仓库根目录。
-2. Cloudflare Pages 连接该仓库：生产分支 `main`，构建命令留空，输出目录留空。
-3. 等待部署完成（显示 "Functions: Uploaded"）。
+## 如何「安装」
+### 手机
+- **Safari（iOS）**：打开 index.html → 分享 → 「添加到主屏幕」→ 出现星云地球图标，全屏运行。
+- **Chrome / Edge（Android）**：打开 → 地址栏「安装」或菜单「添加到主屏幕」→ 桌面出现 App 图标。
 
-## 云同步（已默认填好坚果云）
-| 通道 | 服务器地址 | 账号 | 密码 | 远程文件夹 |
-|---|---|---|---|---|
-| 坚果云（默认·已选） | `https://jianguoyu.pages.dev/nut/dav` | `125573798@qq.com` | 应用密码已填 | `/家庭管家备份/` |
-| Koofr | `https://jianguoyu.pages.dev/dav/Koofr` | Koofr 邮箱 | Koofr 应用密码 | `/家庭管家备份/` |
+### 电脑
+- **Chrome / Edge / Brave**：打开 index.html → 地址栏右侧出现 「⊕ 安装」图标 → 点击，
+  即以前独立窗口运行（无浏览器地址栏），并可在系统启动器/开始菜单找到。
 
-使用者操作：**只点「测试连接」→ 成功后点「保存云同步设置」**，无需懂 WebDAV。
+## 如何发布（可选）
+若想通过 https 网址直接安装（PWA 要求 https 或 localhost）：
+- 放到任意静态托管：GitHub Pages、Vercel、Netlify、COS、nginx 均可，**无需后端**。
+- 目录保持原样，`index.html` 为入口。
+- 本地直接 `file://` 打开也可运行，但 Service Worker 缓存仅在 `localhost`/`https` 生效；
+  此时 App 仍能正常使用，只是离线缓存不生效（不影响数据，数据本就存在 localStorage）。
 
-## 凭据说明
-- 坚果云密码为「第三方应用密码」（截图确认：应用 `ims_backup`，授权 2026-10-08），非登录密码。
-- 建议每 3~6 个月在坚果云「第三方应用管理」撤销并重发。
+## 数据说明
+- 全部数据仍在 `localStorage`（与原程序一致），**不上传、不联网**。
+- Koofr 同步走的是原程序内置的 Koofr WebDAV 逻辑，行为不变。
+- 清除浏览器数据 = 清除账本，请务必使用程序内的「导出/备份」功能。
 
-## ⚠️ 隐私提醒（重要）
-`index.html` 内含明文的坚果云应用密码。
-- 若仓库为 **Public**：请立即到坚果云撤销该应用密码，并将仓库改为 **Private**；或改用 Cloudflare Pages 环境变量注入（需改前端读取逻辑）。
-- 若仓库为 **Private**：风险较低，但仍建议不要把仓库邀请无关协作者。
-
-## 切换通道
-前端下拉选「Koofr」即自动回填 Koofr 的服务器地址；选「坚果云」即回填坚果云地址。
-原有「加密上传 / 下载恢复 / 本地备份 / 导出」功能与界面**未做任何改动**。
+## 图标
+采用你提供的星云地球图，按 iOS 连续圆角（≈22.7%）生成各尺寸，
+`purpose: maskable` 保证在 Android 自适应图标上不被裁掉主体。

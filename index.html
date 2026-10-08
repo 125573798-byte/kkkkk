@@ -1713,59 +1713,7 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
 
             <div class="form-group">
                 <label class="form-label">服务器地址</label>
-                
-<!-- 双通道：Koofr / 坚果云 -->
-<div class="card" style="margin-top:12px">
-  <div class="card-title">☁️ 云盘通道</div>
-  <label style="font-size:13px;color:var(--sub)">选择网盘后服务器地址会自动填充，普通用户无需修改。</label>
-  <select id="cloudProvider" onchange="applyCloudPreset(this.value)"
-          style="width:100%;margin:10px 0;padding:10px;border-radius:10px;border:1px solid var(--border);font-size:15px">
-    <option value="nutstore" selected>坚果云（默认 · 已填好账号）</option>
-    <option value="koofr">Koofr</option>
-  </select>
-</div>
-
-<script>
-// 双通道预设：前端永远连自己的 Pages 域名，由 Functions 代理到网盘
-const CLOUD_PRESETS = {
-  koofr: {
-    base: 'https://jianguoyu.pages.dev/dav/Koofr',
-    user: '',
-    pass: '',
-    remote: '/家庭管家备份/',
-    userLabel: 'Koofr 邮箱',
-    passLabel: 'Koofr 应用密码'
-  },
-  nutstore: {
-    base: 'https://jianguoyu.pages.dev/nut/dav',
-    user: '125573798@qq.com',
-    pass: 'aq7dif6r39wk2g93',
-    remote: '/家庭管家备份/',
-    userLabel: '坚果云邮箱',
-    passLabel: '坚果云第三方应用密码'
-  }
-};
-
-function applyCloudPreset(key){
-  const p = CLOUD_PRESETS[key];
-  if(!p) return;
-  const s = document.getElementById('cloudServer');
-  const u = document.getElementById('cloudUser');
-  const pw = document.getElementById('cloudPass');
-  const d = document.getElementById('cloudDir');
-  if(s) s.value = p.base;
-  if(u){ u.value = p.user || ''; u.placeholder = p.userLabel; }
-  if(pw){ pw.value = p.pass || ''; pw.placeholder = p.passLabel; }
-  if(d) d.value = p.remote;
-}
-
-window.addEventListener('DOMContentLoaded', function(){
-  const sel = document.getElementById('cloudProvider');
-  if(sel) applyCloudPreset(sel.value);
-});
-</script>
-
-<input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
+                <input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label class="form-label">账号（Koofr 邮箱）</label>
