@@ -2311,13 +2311,13 @@ async function clearStore(s){await waitForDB();if(!db||!db.objectStoreNames.cont
 
 /* ========== 只读模式 ========== */
 const READONLY_KEY='appReadOnly_v1';
-let appReadOnly=false;
+let appReadOnly=true;
 
 function initReadOnlyMode(){
     try{
         const v=localStorage.getItem(READONLY_KEY);
         // 默认只读；只有显式设为 '0' 才进入编辑模式
-        appReadOnly = (v === '1');
+        appReadOnly = (v !== '0');
     }catch(e){ appReadOnly=true; }
     renderReadOnlyUI();
 }
