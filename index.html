@@ -211,37 +211,7 @@ body.readonly-mode #readonlyToggleBtn.active{background:rgba(245,158,11,.15);}
 .top-add-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:22px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent}
 .top-add-btn:active{background:color-mix(in srgb,var(--primary) 10%,transparent);border-color:var(--primary);color:var(--primary)}
 
-/* ===== 只读提示条 ===== */
-.readonly-banner{
-    display:none;
-    background:linear-gradient(135deg,#f59e0b,#d97706);
-    color:#fff;
-    border-radius:12px;
-    padding:11px 14px;
-    margin-bottom:12px;
-    font-size:13px;
-    font-weight:600;
-    align-items:center;
-    gap:8px;
-    cursor:pointer;
-    box-shadow:var(--shadow);
-    -webkit-tap-highlight-color:transparent;
-    transition:transform .1s;
-}
-.readonly-banner.show{display:flex;}
-.readonly-banner:active{transform:scale(.99);}
-.readonly-banner .rb-icon{font-size:18px;line-height:1;flex-shrink:0;}
-.readonly-banner .rb-text{flex:1;min-width:0;word-break:break-all;line-height:1.4;}
-.readonly-banner .rb-text small{display:block;font-size:11px;font-weight:500;opacity:.9;margin-top:2px;}
-.readonly-banner .rb-action{
-    font-size:11.5px;
-    padding:5px 11px;
-    background:rgba(255,255,255,.25);
-    border-radius:8px;
-    font-weight:700;
-    white-space:nowrap;
-    flex-shrink:0;
-}
+/* 只读提示条已移除：仅保留左侧栏锁图标作为唯一提示 */
 
 /* 只读模式下隐藏所有新增按钮 */
 body.readonly-mode .float-btn{display:none !important;}
@@ -1257,14 +1227,7 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
         </button>
     </div>
 
-    <!-- 只读提示条 -->
-    <div class="readonly-banner" id="readonlyBanner" onclick="toggleReadOnly()">
-        <span class="rb-icon">🔒</span>
-        <span class="rb-text">只读模式 · 数据已保护
-            <small>可安心查看，防止误操作</small>
-        </span>
-        <span class="rb-action">点击解锁 →</span>
-    </div>
+    <!-- 只读模式：提示已移除，仅左侧栏锁图标保留 -->
 
     <!-- ===== 仪表盘 ===== -->
     <div id="view-dashboard" class="view">
@@ -1662,13 +1625,10 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
                 <svg class="ico ico-sm" viewBox="0 0 24 24" style="color:var(--primary)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 只读 / 编辑模式
             </div>
-            <p style="font-size:13px;color:var(--sub);margin-bottom:12px;line-height:1.55;">
-                默认打开程序处于<b>只读模式</b>，所有新增、修改、删除操作均被拦截，可放心把网页分享给家人查看。点击左侧栏锁图标或下方按钮，验证密码后可切换到编辑模式。
-            </p>
             <div class="fund-switch-row" id="readonlySwitchRow" style="margin-bottom:0;">
                 <div>
                     <div class="sr-txt" id="readonlySwitchTxt">当前状态：只读模式</div>
-                    <div class="sr-desc">关闭将进入只读模式（立即生效）</div>
+                    <div class="sr-desc">滑动解锁编辑（需验证密码）</div>
                 </div>
                 <div class="fund-switch" id="readonlySwitch"></div>
             </div>
@@ -1713,7 +1673,59 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
 
             <div class="form-group">
                 <label class="form-label">服务器地址</label>
-                <input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
+                
+<!-- 双通道：Koofr / 坚果云 -->
+<div class="card" style="margin-top:12px">
+  <div class="card-title">☁️ 云盘通道</div>
+  <label style="font-size:13px;color:var(--sub)">选择网盘后服务器地址会自动填充，普通用户无需修改。</label>
+  <select id="cloudProvider" onchange="applyCloudPreset(this.value)"
+          style="width:100%;margin:10px 0;padding:10px;border-radius:10px;border:1px solid var(--border);font-size:15px">
+    <option value="nutstore" selected>坚果云（默认 · 已填好账号）</option>
+    <option value="koofr">Koofr</option>
+  </select>
+</div>
+
+<script>
+// 双通道预设：前端永远连自己的 Pages 域名，由 Functions 代理到网盘
+const CLOUD_PRESETS = {
+  koofr: {
+    base: 'https://jianguoyu.pages.dev/dav/Koofr',
+    user: '',
+    pass: '',
+    remote: '/家庭管家备份/',
+    userLabel: 'Koofr 邮箱',
+    passLabel: 'Koofr 应用密码'
+  },
+  nutstore: {
+    base: 'https://jianguoyu.pages.dev/nut/dav',
+    user: '125573798@qq.com',
+    pass: 'aq7dif6r39wk2g93',
+    remote: '/家庭管家备份/',
+    userLabel: '坚果云邮箱',
+    passLabel: '坚果云第三方应用密码'
+  }
+};
+
+function applyCloudPreset(key){
+  const p = CLOUD_PRESETS[key];
+  if(!p) return;
+  const s = document.getElementById('cloudServer');
+  const u = document.getElementById('cloudUser');
+  const pw = document.getElementById('cloudPass');
+  const d = document.getElementById('cloudDir');
+  if(s) s.value = p.base;
+  if(u){ u.value = p.user || ''; u.placeholder = p.userLabel; }
+  if(pw){ pw.value = p.pass || ''; pw.placeholder = p.passLabel; }
+  if(d) d.value = p.remote;
+}
+
+window.addEventListener('DOMContentLoaded', function(){
+  const sel = document.getElementById('cloudProvider');
+  if(sel) applyCloudPreset(sel.value);
+});
+</script>
+
+<input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label class="form-label">账号（Koofr 邮箱）</label>
@@ -2337,8 +2349,7 @@ function setReadOnlyMode(val){
 }
 function renderReadOnlyUI(){
     document.body.classList.toggle('readonly-mode', appReadOnly);
-    const banner=document.getElementById('readonlyBanner');
-    if(banner) banner.classList.toggle('show', appReadOnly);
+    // 只读提示条已移除，仅左侧栏锁图标作为唯一提示
     const txt=document.getElementById('readonlyText');
     const icon=document.getElementById('readonlyIcon');
     if(txt) txt.innerText = appReadOnly ? '只读' : '编辑';
@@ -2373,7 +2384,7 @@ function toggleReadOnly(){
 /* 全局写入守卫：所有"写操作"函数入口调用 */
 function guardEdit(){
     if(appReadOnly){
-        showToast('只读模式：点击左侧锁图标解锁编辑');
+        showToast('只读模式，无法修改');
         return false;
     }
     return true;
