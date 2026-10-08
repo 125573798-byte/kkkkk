@@ -1,166 +1,27 @@
 {
-  "name": "管家koofr",
-  "short_name": "Koofr管家",
-  "description": "家庭/个人管家：账目、密码、合同、联系人、待办、Koofr 云同步，数据仅存本机。",
-  "start_url": "./index.html",
-  "scope": "./",
+  "name": "管家 · 家庭账本",
+  "short_name": "管家",
+  "description": "家庭账本、密码保险箱、合同、资金、供应商，支持 Koofr / 坚果云双通道加密云同步",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
-  "display_override": [
-    "standalone",
-    "minimal-ui"
-  ],
   "orientation": "portrait",
-  "background_color": "#0a0c1a",
-  "theme_color": "#0a0c1a",
-  "lang": "zh-CN",
+  "background_color": "#0f172a",
+  "theme_color": "#0ea5e9",
   "icons": [
-    {
-      "src": "icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "/icons/icon-72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-128.png",  "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-144.png",  "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-152.png",  "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-192.png",  "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-384.png",  "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png",  "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "shortcuts": [
-    {
-      "name": "资金台账",
-      "short_name": "资金",
-      "url": "./index.html#funds",
-      "icons": [
-        {
-          "src": "icons/icon-96.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "密码保险箱",
-      "short_name": "密码",
-      "url": "./index.html#passwords",
-      "icons": [
-        {
-          "src": "icons/icon-96.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "合同管理",
-      "short_name": "合同",
-      "url": "./index.html#contracts",
-      "icons": [
-        {
-          "src": "icons/icon-96.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "供应商",
-      "short_name": "供应商",
-      "url": "./index.html#suppliers",
-      "icons": [
-        {
-          "src": "icons/icon-96.png",
-          "sizes": "96x96"
-        }
-      ]
-    }
-  ],
-  "categories": [
-    "productivity",
-    "finance",
-    "utilities"
-  ],
-  "screenshots": []
+    { "name": "资金台账", "short_name": "资金", "url": "/index.html#fund",     "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] },
+    { "name": "密码保险箱", "short_name": "密码", "url": "/index.html#pwd",    "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] },
+    { "name": "合同管理", "short_name": "合同", "url": "/index.html#contract", "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] },
+    { "name": "供应商", "short_name": "供应商", "url": "/index.html#vendor",   "icons": [{ "src": "/icons/icon-96.png", "sizes": "96x96" }] }
+  ]
 }
