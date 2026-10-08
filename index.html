@@ -1673,8 +1673,12 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
 
             <div class="form-group">
                 <label class="form-label">服务器地址</label>
-                <input type="text" class="form-input" id="cloudServer" value="https://jianguoyu.pages.dev/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
-                <div class="form-hint">已预填为 Cloudflare Pages 同源代理（解决跨域 405/404）。程序会自动按「Pages 代理 → Worker 代理 → 直连 Koofr」顺序选通道，无需手动改。</div>
+                
+<input type="text" class="form-input" id="cloudServer" value="https://jianguoyu.pages.dev/dav/Koofr" readonly autocomplete="off" autocapitalize="off" spellcheck="false">
+                <div class="form-hint">服务器已固定为 Cloudflare Pages 同源代理（解决跨域 405/404），程序会自动按「Pages 代理 → Worker 代理 → 直连 Koofr」顺序选通道，无需修改。</div>
+
+
+<input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label class="form-label">账号（Koofr 邮箱）</label>
@@ -6400,65 +6404,5 @@ window.onload=async()=>{
 };
 </script>
 <div id="toast" class="toast"></div>
-
-/* ========== Koofr 云通道（干净版：仅 Koofr） ========== */
-// 通道优先级：
-//   1) Pages Functions 同源代理  https://jianguoyu.pages.dev/dav/Koofr
-//   2) 独立 Worker 代理         https://koofr-proxy.125573798.workers.dev/dav/Koofr
-//   3) 直连 Koofr               https://app.koofr.net/dav/Koofr （单机/本地兜底）
-const KOOF_ENDPOINTS = [
-    'https://jianguoyu.pages.dev/dav/Koofr',
-    'https://koofr-proxy.125573798.workers.dev/dav/Koofr',
-    'https://app.koofr.net/dav/Koofr'
-];
-const KOOF_REMOTE_DIR = '/家庭管家备份/';
-const KOOF_ENDPOINT_KEY = 'koofr_endpoint_v1';
-
-// 探测单个端点是否可用（发 OPTIONS 预检 + 一次轻量请求）
-async function koofrProbe(base) {
-    try {
-        const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 6000);
-        const r = await fetch(base + KOOF_REMOTE_DIR, {
-            method: 'OPTIONS',
-            headers: { 'Authorization': 'Basic ' + btoa('probe:probe') },
-            signal: ctrl.signal
-        });
-        clearTimeout(t);
-        // 2xx 或 401/403/404 都说明"通道通了"（401=需认证，404=目录不存在但服务可达）
-        return (r.status >= 200 && r.status < 500);
-    } catch (e) {
-        return false;
-    }
-}
-
-let _koofrEndpointCache = null;
-async function pickKoofrEndpoint() {
-    if (_koofrEndpointCache) return _koofrEndpointCache;
-    // 优先使用上次成功的端点
-    try { _koofrEndpointCache = localStorage.getItem(KOOF_ENDPOINT_KEY) || null; } catch (e) {}
-    if (_koofrEndpointCache) {
-        if (await koofrProbe(_koofrEndpointCache)) return _koofrEndpointCache;
-    }
-    for (const ep of KOOF_ENDPOINTS) {
-        if (await koofrProbe(ep)) {
-            _koofrEndpointCache = ep;
-            try { localStorage.setItem(KOOF_ENDPOINT_KEY, ep); } catch (e) {}
-            return ep;
-        }
-    }
-    // 全部失败，回退到直连（单机仍可用）
-    return KOOF_ENDPOINTS[2];
-}
-
-// 对外：返回当前应选的服务器地址（供"测试连接/上传/下载"使用）
-async function getKoofrServerUrl() {
-    const ep = await pickKoofrEndpoint();
-    // 若页面上的输入框存在，静默回填（用户无需关心走哪条通道）
-    const inp = document.getElementById('cloudServer');
-    if (inp && inp.value !== ep) inp.value = ep;
-    return ep;
-}
-
 </body>
 </html>
