@@ -1257,6 +1257,15 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
         </button>
     </div>
 
+    <!-- 只读提示条 -->
+    <div class="readonly-banner" id="readonlyBanner" onclick="toggleReadOnly()">
+        <span class="rb-icon">🔒</span>
+        <span class="rb-text">只读模式 · 数据已保护
+            <small>可安心查看，防止误操作</small>
+        </span>
+        <span class="rb-action">点击解锁 →</span>
+    </div>
+
     <!-- ===== 仪表盘 ===== -->
     <div id="view-dashboard" class="view">
         <div class="dash-hero">
@@ -1704,7 +1713,7 @@ body.modal-open{position:fixed;left:0;right:0;width:100%;overflow:hidden;}
 
             <div class="form-group">
                 <label class="form-label">服务器地址</label>
-                <input type="text" class="form-input" id="cloudServer" placeholder="https://jianguoyu.pages.dev/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
+                <input type="text" class="form-input" id="cloudServer" placeholder="https://app.koofr.net/dav/Koofr" autocomplete="off" autocapitalize="off" spellcheck="false">
             </div>
             <div class="form-group">
                 <label class="form-label">账号（Koofr 邮箱）</label>
@@ -4997,7 +5006,7 @@ const CLOUD_LOG_KEY='cloudSyncLog_v1';
 const DEFAULT_CLOUD_CFG={
     enabled:true,
     autoCheck:true,
-    server:'https://jianguoyu.pages.dev/dav/Koofr',
+    server:'https://app.koofr.net/dav/Koofr',
     username:'125573798@qq.com',
     password:'2jbnuqa6j7k70icp',
     remotePath:'/家庭管家备份/'
@@ -6417,7 +6426,7 @@ window.onload=async()=>{
         renderCloudSettings();
         updateKeyboardInset();
         switchView('dashboard','仪表盘',navDashboard());
-        console.log('[应用启动完成] v'+APP_VERSION+' · 主题：'+savedTheme+' · 农历库：'+(hasLunarLib()?'已加载':'未加载')+' · 模式：'+(appReadOnly?'只读':'编辑')+'（顶部只读条已移除）' + ' · 加密：'+(cryptoAvailable()?'可用':'不可用（需HTTPS）'));
+        console.log('[应用启动完成] v'+APP_VERSION+' · 主题：'+savedTheme+' · 农历库：'+(hasLunarLib()?'已加载':'未加载')+' · 模式：'+(appReadOnly?'只读':'编辑')+' · 加密：'+(cryptoAvailable()?'可用':'不可用（需HTTPS）'));
 
         // 自动检查云端更新（延迟 3 秒，避免阻塞首屏）
         setTimeout(function(){
